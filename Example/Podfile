@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '9.0'
+
+target 'Anvil_Example' do
+  pod 'Anvil', :path => '../'
+
+  target 'Anvil_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
