@@ -1,0 +1,29 @@
+on: push
+name: AnvilUnitTest
+jobs:
+  UnitTest:
+    name: UnitTest
+    runs-on: macos-latest
+    strategy:
+        fail-fast: false
+        matrix:
+          workspace: "Anvil.xcworkspace"
+          scheme: "Anvil"
+          testScheme: "Anvil-Example"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Pod Install
+        run: cd Example && pod install
+      - name: Test via xcodebuild
+        run: |
+          DESTINATION="platform=iOS Simulator,name=iPhone 13 Pro"
+        
+          xcodebuild clean test \
+            -destination "${ DESTINATION }" \
+            -scheme ${{ matrix.testScheme }} \
+            -workspace "Example/${{ matrix.workspace }}" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            ONLY_ACTIVE_ARCH=YES | xcpretty
+         

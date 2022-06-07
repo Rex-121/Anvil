@@ -1,0 +1,39 @@
+{
+  "name": "Anvil",
+  "version": "0.1.0",
+  "summary": "A short description of Anvil.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Tyrant/Anvil",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Tyrant": "rex_wzc@163.com"
+  },
+  "source": {
+    "git": "https://github.com/Tyrant/Anvil.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0",
+    "osx": "10.12",
+    "tvos": "10.0",
+    "watchos": "3.0"
+  },
+  "swift_versions": "5.3",
+  "source_files": "Anvil/Classes/**/*",
+  "default_subspecs": "Core",
+  "dependencies": {
+    "Moya/ReactiveSwift": [
+      "~> 15.0"
+    ]
+  },
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": "Anvil/Core/**/*"
+    }
+  ],
+  "swift_version": "5.3"
+}

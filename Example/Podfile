@@ -1,6 +1,8 @@
 use_frameworks!
 
-platform :ios, '9.0'
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '11.0'
 
 target 'Anvil_Example' do
   pod 'Anvil', :path => '../'

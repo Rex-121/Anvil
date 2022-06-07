@@ -1,0 +1,6 @@
+framework module Pods_Anvil_Example {
+  umbrella header "Pods-Anvil_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

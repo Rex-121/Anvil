@@ -1,28 +1,70 @@
 import XCTest
+import ReactiveSwift
+import Moya
 import Anvil
 
 class Tests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    fileprivate let net = NetProvider<NetBusiness>()
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure() {
-            // Put the code you want to measure the time of here.
+    func testVersion() throws {
+        
+        let success = XCTestExpectation(description: "success")
+        
+        
+        let action = Action { self.net.detach(.version) }
+        
+        
+        action.values.observeValues { (version) in
+            XCTAssert(false)
+            success.fulfill()
         }
+        
+        action.errors.observeValues { e in
+            print(e)
+            XCTAssert(true)
+            success.fulfill()
+        }
+        
+        action.apply().start()
+        
+        wait(for: [success], timeout: 60)
+        
+        
     }
     
+    
+    fileprivate enum NetBusiness: AnvilTargetType {
+        
+        
+        var headers: [String : String]? { nil }
+        
+        
+        case version
+        
+        case net404
+        
+        var baseURL: URL {
+            return URL(string: "http://appcourse.roobo.com.cn/pudding/teacher/v1")!
+        }
+        
+        var path: String {
+            switch self {
+            case .version: return "/apk/org/version/detail"
+            case .net404: return "/app/version/404"
+            }
+            
+        }
+        
+        var method: Moya.Method {
+            return .get
+        }
+        
+        var sampleData: Data {
+            return Data()
+        }
+        
+        var task: Task { .requestPlain }
+        
+    }
 }
