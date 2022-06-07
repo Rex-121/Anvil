@@ -11,7 +11,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Pod Install
         run: cd Example && pod install
-      - name: Test via xcodebuild
+      - name: Build
+        run: xcodebuild clean build -scheme 'Anvil' -workspace 'Anvil.xcworkspace' | xcpretty
+      - name: Test
         run: |
           DESTINATION="platform=iOS Simulator,name=iPhone 13 Pro"
         
