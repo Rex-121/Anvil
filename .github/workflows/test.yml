@@ -6,10 +6,6 @@ jobs:
     runs-on: macos-latest
     strategy:
         fail-fast: false
-        matrix:
-          workspace: "Anvil.xcworkspace"
-          scheme: "Anvil"
-          testScheme: "Anvil-Example"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,8 +17,8 @@ jobs:
         
           xcodebuild clean test \
             -destination "${ DESTINATION }" \
-            -scheme ${{ matrix.testScheme }} \
-            -workspace "Example/${{ matrix.workspace }}" \
+            -scheme "Anvil-Example" \
+            -workspace "Example/Anvil.xcworkspace" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             ONLY_ACTIVE_ARCH=YES | xcpretty
