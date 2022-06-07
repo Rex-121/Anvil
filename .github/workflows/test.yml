@@ -16,7 +16,7 @@ jobs:
           DESTINATION="platform=iOS Simulator,name=iPhone 13 Pro"
         
           xcodebuild clean test \
-            -destination "${ DESTINATION }" \
+            -destination "${DESTINATION}" \
             -scheme "Anvil-Example" \
             -workspace "Example/Anvil.xcworkspace" \
             CODE_SIGN_IDENTITY="" \
