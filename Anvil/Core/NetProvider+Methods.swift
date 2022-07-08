@@ -10,6 +10,8 @@ import ReactiveSwift
 
 import Moya
 
+import Foundation
+
 // MARK: - Launch - 返回方式为 `<GIResult<解析>, AnvilNetError>`
 extension NetProvider {
     
@@ -47,11 +49,18 @@ extension NetProvider {
             .attempt { Response.survive($0, goal: 200) }
             .attemptMap({ (response) -> Result<GIResult<Engine>, AnvilNetError> in
                 do {
-                    let result = try decoder.decode(GIResult<Engine>.self, from: response.data)
-                    if result.good {
-                        return .success(result)
+                    
+                    let isSuccess = try decoder.decode(GIResult<DontCare>.self, from: response.data)
+                    if isSuccess.good {
+                        let result = try decoder.decode(GIResult<Engine>.self, from: response.data)
+                        if result.good {
+                            return .success(result)
+                        }
+                        else {
+                            return .failure(.business(result.info))
+                        }
                     }
-                    return .failure(result.errorInfo)
+                    return .failure(isSuccess.errorInfo)
                 } catch {
                     return .failure(.ParseWrong)
                 }
@@ -184,7 +193,7 @@ extension NetProvider {
                     }
                 }
                 
-        }
+            }
     }
     
 }
@@ -240,7 +249,7 @@ extension SignalProducer where Error == MoyaError {
             
             switch my {
             case .imageMapping, .jsonMapping, .stringMapping(_), .objectMapping(_, _), .encodableMapping(_),
-                 .parameterEncoding, .requestMapping:
+                    .parameterEncoding, .requestMapping:
                 break
             case .statusCode(let a):
                 msg = "\(msg) '\(a.statusCode)'"
@@ -273,7 +282,7 @@ extension NetProvider {
             .parseMoyaError()
             .attempt { Response.survive($0, goal: 200) }
             .attemptMap({ (response) -> Result<AnvilResult<Engine>, AnvilNetError> in
-
+                
                 do {
                     return .success(try decoder.decode(AnvilResult<Engine>.self, from: response.data))
                 } catch {
@@ -288,7 +297,7 @@ extension NetProvider {
         return self.launch(target, codable, decoder).attemptMap({ (result) -> Result<(Engine?, BasicInfo), AnvilNetError> in
             guard let value = result.result else {
                 
-                if result.good ?? false {
+                if result.good {
                     return .success((nil, result.info))
                 }
                 
